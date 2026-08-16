@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Risk Desk — coverage universe: 1</title>
+<meta name="description" content="Institutional risk analytics, applied to one memecoin. Value at risk, realized volatility, maximum drawdown. Parody, not financial advice.">
+<meta property="og:title" content="The Risk Desk">
+<meta property="og:description" content="Aladdin manages twenty-one trillion dollars. We showed it one memecoin.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230f1115'/><text x='50' y='72' font-size='62' text-anchor='middle' fill='%23e5484d' font-family='monospace'>σ</text></svg>">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="bar">
+  <div class="wrap bar-in">
+    <span class="mark">THE RISK DESK</span>
+    <span class="cov">COVERAGE UNIVERSE: 1</span>
+    <span id="feed" class="feed">FEED: STANDBY</span>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <p class="eyebrow">RISK REPORT — SINGLE ASSET</p>
+    <h1>Value at risk:<br><span id="hero-var" class="varnum">measuring…</span></h1>
+    <p class="sub">Aladdin is the risk system pension funds, insurers, and central banks use to
+    understand what they own. It is open source. We forked it, deleted the parts that require
+    permission, and pointed what remained at one memecoin.</p>
+    <p class="sub dim">The measures below are the ordinary ones, computed the ordinary way, on live
+    market data. The asset is not serious. Both are true at once.</p>
+    <div class="cta">
+      <a id="buy" class="btn" target="_blank" rel="noopener">TAKE THE RISK ›</a>
+      <a id="fork" class="btn ghost" target="_blank" rel="noopener">THE FORK ›</a>
+      <a href="#methodology" class="btn ghost">METHODOLOGY ›</a>
+    </div>
+  </div>
+</section>
+
+<main class="wrap">
+
+  <section class="panel" id="report">
+    <h2>RISK REPORT <span id="obs" class="note">awaiting coverage</span></h2>
+    <div class="grid">
+      <div class="cell"><div class="k">VALUE AT RISK — 95%</div><div class="v" id="var95">—</div><div class="n">1-day, historical, % of position</div></div>
+      <div class="cell"><div class="k">VALUE AT RISK — 99%</div><div class="v" id="var99">—</div><div class="n">1-day, historical, % of position</div></div>
+      <div class="cell"><div class="k">REALIZED VOLATILITY</div><div class="v" id="vol">—</div><div class="n">annualized, 365d convention</div></div>
+      <div class="cell"><div class="k">MAXIMUM DRAWDOWN</div><div class="v dn" id="mdd">—</div><div class="n">peak to trough, observed</div></div>
+      <div class="cell"><div class="k">SHARPE RATIO</div><div class="v" id="sharpe">—</div><div class="n">risk-free rate assumed zero¹</div></div>
+      <div class="cell"><div class="k">DIVERSIFICATION BENEFIT</div><div class="v flat">0.0%</div><div class="n">coverage universe: 1</div></div>
+      <div class="cell"><div class="k">WORST SINGLE DAY</div><div class="v dn" id="worst">—</div><div class="n">observed, not modelled</div></div>
+      <div class="cell"><div class="k">BEST SINGLE DAY</div><div class="v up" id="best">—</div><div class="n">observed, not repeatable</div></div>
+      <div class="cell"><div class="k">LAST PRICE</div><div class="v" id="px">—</div><div class="n" id="mcap">—</div></div>
+    </div>
+    <p class="fine">¹ The risk-free rate is assumed to be zero because anyone holding this asset has
+    already expressed a view on the risk-free rate.</p>
+  </section>
+
+  <section class="panel" id="scenarios">
+    <h2>STRESS SCENARIOS</h2>
+    <table class="scen">
+      <tr><th>SCENARIO</th><th>SHOCK</th><th>PORTFOLIO IMPACT</th><th>DESK COMMENTARY</th></tr>
+      <tr><td>Mild risk-off</td><td>−20%</td><td class="dn">−20%</td><td>Within tolerance. Tolerance is total.</td></tr>
+      <tr><td>Severe risk-off</td><td>−50%</td><td class="dn">−50%</td><td>Survivable. Survival is not the same as recommended.</td></tr>
+      <tr><td>Tail event</td><td>−99%</td><td class="dn">−99%</td><td>Modelled. Also observed. Also Tuesday.</td></tr>
+      <tr><td>Liquidity withdrawal</td><td>−100%</td><td class="dn">−100%</td><td>The desk has no hedge for this and has made peace with that.</td></tr>
+      <tr><td>Favourable outcome</td><td>+1,000%</td><td class="up">+1,000%</td><td>Not modelled. The desk does not model joy.</td></tr>
+    </table>
+    <p class="fine">Scenarios are applied to a portfolio consisting entirely of one asset, because
+    that is the portfolio. Correlation matrix: [ 1.00 ].</p>
+  </section>
+
+  <section class="panel" id="methodology">
+    <h2>METHODOLOGY</h2>
+    <p>The desk runs a fork of <strong>AladdinSDK</strong>, the official SDK for BlackRock's Aladdin —
+    the risk platform used across roughly twenty-one trillion dollars of assets. It is Apache-2.0
+    licensed, and anyone may fork it.</p>
+    <p>Apache-2.0 §4(b) requires that modified files carry prominent notices stating that they were
+    changed. Ours state the following, because it is what happened:</p>
+    <ul>
+      <li><strong>Removed the entitled surface.</strong> Aladdin's APIs and Data Cloud require an
+      entitlement. We did not have one. Deleted 18,210 lines of generated institutional client
+      surface, the Data Cloud client, and the authentication modules whose only purpose was to prove
+      we were allowed to be there. <strong>145 files changed, 27,228 deletions.</strong></li>
+      <li><strong>Added a risk desk with a coverage universe of one.</strong> Historical value at
+      risk at 95% and 99%, annualized realized volatility, maximum drawdown, Sharpe ratio, and a
+      diversification benefit that is always exactly zero. It runs on public market data and requires
+      permission from no one.</li>
+    </ul>
+    <p>The figures on this page are computed live, in your browser, using the same measures the
+    forked module computes in Python. Nothing here is illustrative.</p>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="fine"><strong>Notice from the desk.</strong> The Risk Desk is a parody and none of this is
+    financial advice. $RISK is a meme coin. The risk measures are real; that is the joke, and it is
+    also the warning.</p>
+    <p class="fine">BlackRock has no affiliation with this project and has not endorsed it. Aladdin® is
+    BlackRock's trademark, referenced descriptively to state truthfully what this is a fork of.</p>
+    <p class="fine">Investor relations: <a id="x" href="#" target="_blank" rel="noopener">on X</a> ·
+    The fork: <a id="fork2" href="#" target="_blank" rel="noopener">public and auditable</a></p>
+  </div>
+</footer>
+
+<script src="config.js?v=1"></script>
+<script src="app.js?v=1"></script>
+</body>
+</html>
