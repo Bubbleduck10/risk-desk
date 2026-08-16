@@ -10,6 +10,6 @@ const CONFIG = {
   contractAddress: "",          // <-- paste CA at listing (empty = no coverage)
   twitterUrl: "https://x.com/RiskDesk_",
   loreUrl: "https://x.com/RiskDesk_/status/2088888972651135323",
-  forkUrl: "https://github.com/Bubbleduck10/aladdinsdk",
-  pollMs: 20000,
+  upstreamUrl: "https://github.com/BlackRock/aladdinsdk",   // the original; our fork stays unlinked
+  pollMs: 60000,                // the public feed rate-limits eager desks
 };

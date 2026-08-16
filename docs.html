@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Risk Desk — documentation</title>
+<meta name="description" content="How the desk was built: what was forked, what was deleted, and how the risk measures are computed.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230f1115'/><text x='50' y='72' font-size='62' text-anchor='middle' fill='%23e5484d' font-family='monospace'>σ</text></svg>">
+<link rel="stylesheet" href="style.css">
+<style>
+  .doc { max-width: 820px; }
+  .doc h2 { margin-top: 0; }
+  .doc p, .doc li { color: #c3c9d4; margin-bottom: 14px; }
+  .doc h3 { font-family: var(--mono); font-size: 0.8rem; letter-spacing: 0.18em; color: var(--red);
+    margin: 34px 0 14px; font-weight: 400; }
+  .doc code { font-family: var(--mono); font-size: 0.86rem; color: var(--txt); background: #191d25; padding: 1px 6px; }
+  .doc pre { background: #0b0d11; border: 1px solid var(--line); border-left: 3px solid var(--red);
+    padding: 18px 20px; overflow-x: auto; font-family: var(--mono); font-size: 0.82rem;
+    line-height: 1.65; color: #c3c9d4; margin: 14px 0 20px; }
+  .doc ul { list-style: none; margin-bottom: 18px; }
+  .doc li { padding-left: 18px; border-left: 2px solid var(--line); }
+  .doc .stat { font-family: var(--mono); color: var(--red); font-size: 1.15rem; display: block;
+    margin: 18px 0; letter-spacing: 0.02em; }
+  .back { display: inline-block; margin: 22px 0 0; font-family: var(--mono); font-size: 0.78rem;
+    letter-spacing: 0.1em; color: var(--dim); text-decoration: none; }
+  .back:hover { color: var(--txt); }
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="wrap bar-in">
+    <span class="mark">THE RISK DESK</span>
+    <span class="cov">DOCUMENTATION</span>
+    <span class="feed">METHODOLOGY</span>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="panel doc">
+    <a href="index.html" class="back">‹ BACK TO THE DESK</a>
+    <h2 style="margin-top:22px">How this was built</h2>
+
+    <h3>WHAT ALADDIN IS</h3>
+    <p>Aladdin is BlackRock's risk platform. Pension funds, insurers, sovereign wealth funds and
+    central banks use it to understand what they own; estimates put the assets analysed through it
+    at roughly twenty-one trillion dollars. Its job is to answer one question, continuously, for
+    most of the institutions that matter: <em>what happens to what you own if things go badly?</em></p>
+    <p>BlackRock open-sourced the SDK for it under Apache-2.0. Anyone may fork it. That is not a
+    loophole — it is the licence working exactly as intended, and the upstream project is genuinely
+    excellent. You can read it here:
+    <a href="https://github.com/BlackRock/aladdinsdk" target="_blank" rel="noopener">github.com/BlackRock/aladdinsdk</a>.</p>
+
+    <h3>WHAT WE REMOVED</h3>
+    <p>Aladdin's APIs and its Data Cloud require an <strong>entitlement</strong> — credentials issued
+    to institutional clients. We do not have one. So we deleted everything that required permission:
+    the generated institutional client surface (18,210 lines), the Data Cloud client, and the
+    authentication modules whose only purpose was to prove we were allowed to be there.</p>
+    <span class="stat">145 files changed · 27,228 deletions</span>
+    <p>What remained was the shape of a risk system with nothing to be risky about.</p>
+
+    <h3>WHAT WE ADDED</h3>
+    <p>One module: a risk desk with a coverage universe of exactly one asset, running on public
+    market data and requiring permission from no one. It computes:</p>
+    <ul>
+      <li><strong>Value at risk</strong> — historical, non-parametric, 95% and 99%, one-day. The loss
+      exceeded (1 − confidence) of the time. No distributional assumption is made, because no
+      distribution would survive contact with this asset.</li>
+      <li><strong>Realized volatility</strong> — standard deviation of daily returns, annualized on a
+      365-day convention. Crypto does not observe weekends, holidays, or the concept of an end to
+      the day.</li>
+      <li><strong>Maximum drawdown</strong> — largest peak-to-trough decline observed in the window.</li>
+      <li><strong>Sharpe ratio</strong> — risk-free rate assumed zero, because anyone holding this
+      asset has already expressed a view on the risk-free rate.</li>
+      <li><strong>Diversification benefit</strong> — reported for completeness. Hardcoded to
+      <code>0.0</code>. A portfolio of one asset does not have one.</li>
+    </ul>
+
+    <h3>PROOF THAT IT RUNS</h3>
+    <p>The module was executed against a live Solana asset with 180 daily observations. It printed:</p>
+    <pre>realized volatility   78.9% annualized
+maximum drawdown      71.1%
+worst single day      -11.6%
+value at risk (95%)   6.8% of position, 1-day
+value at risk (99%)   10.8% of position, 1-day
+sharpe ratio          -2.11
+diversification       0.0% (coverage universe: 1)</pre>
+    <p>The front page recomputes those identical measures live in your browser, from live market
+    data, and produces identical figures. Nothing on this site is illustrative. If the desk shows a
+    number, the number was measured.</p>
+
+    <h3>THE LICENCE MADE US CONFESS</h3>
+    <p>Apache-2.0 §4(b) requires that modified files carry prominent notices stating that they were
+    changed. The fork's documentation is therefore legally obliged to state that we removed the
+    institutional surface and pointed the remainder at a memecoin. We complied fully, in detail, and
+    without being asked twice. It is the most rigorous disclosure in this sector, and it was
+    mandatory.</p>
+
+    <h3>WHY BOTHER</h3>
+    <p>Every measure here is real, and every measure says the same thing: this is extremely risky.
+    Double-digit value at risk per day. Drawdowns that would end a career at a real fund. A negative
+    Sharpe ratio, which formally means you were not compensated for any of it.</p>
+    <p>Institutional risk management exists to tell people in suits what they already suspect, with
+    more decimal places and better fonts. We have applied it to an asset where everyone already
+    knows the answer and nobody wants the decimal places. The desk will report them anyway.</p>
+
+    <h3>NOTICES</h3>
+    <p>The Risk Desk is a parody and none of this is financial advice. $RISK is a meme coin. The risk
+    measures are real — that is the joke, and it is also the warning.</p>
+    <p>BlackRock has no affiliation with this project and has not endorsed it. Aladdin® is BlackRock's
+    trademark, referenced descriptively to state truthfully what this is a fork of. Upstream is
+    copyright BlackRock, Inc., licensed Apache-2.0, and that licence and its notices are retained.</p>
+
+    <a href="index.html" class="back">‹ BACK TO THE DESK</a>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="fine">The desk: <a id="x" href="#" target="_blank" rel="noopener">@RiskDesk_</a> ·
+    Upstream: <a href="https://github.com/BlackRock/aladdinsdk" target="_blank" rel="noopener">BlackRock/aladdinsdk</a></p>
+  </div>
+</footer>
+
+<script src="config.js?v=3"></script>
+<script>document.getElementById("x").href = CONFIG.twitterUrl;</script>
+</body>
+</html>

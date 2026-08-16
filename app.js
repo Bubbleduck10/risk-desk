@@ -48,7 +48,12 @@
     return (m / s) * Math.sqrt(ANNUALIZATION_DAYS);
   };
 
-  /* ---------- market data ---------- */
+  /* ---------- market data ----------
+     The daily series changes once a day; the public feed rate-limits callers
+     who forget that. Cache it, and refresh only the price often. */
+  let seriesCache = { ca: null, at: 0, closes: null };
+  const SERIES_TTL_MS = 10 * 60 * 1000;
+
   const fetchSeries = async (ca) => {
     const pools = await (await fetch(`${GT}/networks/${CONFIG.chain}/tokens/${ca}/pools?page=1`)).json();
     const pool = (pools.data || [])[0]?.attributes?.address;
@@ -78,7 +83,15 @@
       return;
     }
     try {
-      const [closes, token] = await Promise.all([fetchSeries(ca), fetchToken(ca)]);
+      const fresh =
+        seriesCache.ca === ca &&
+        seriesCache.closes &&
+        Date.now() - seriesCache.at < SERIES_TTL_MS;
+      const [closes, token] = await Promise.all([
+        fresh ? Promise.resolve(seriesCache.closes) : fetchSeries(ca),
+        fetchToken(ca),
+      ]);
+      seriesCache = { ca, at: fresh ? seriesCache.at : Date.now(), closes };
       const returns = [];
       for (let i = 1; i < closes.length; i++) {
         if (closes[i - 1] > 0) returns.push((closes[i] - closes[i - 1]) / closes[i - 1]);
@@ -112,8 +125,6 @@
     }
   };
 
-  $("fork").href = CONFIG.forkUrl;
-  $("fork2").href = CONFIG.forkUrl;
   $("x").href = CONFIG.twitterUrl;
   $("lore").href = CONFIG.loreUrl;
 
