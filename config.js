@@ -7,7 +7,7 @@ const CONFIG = {
   name: "The Risk Desk",
   ticker: "RISK",
   chain: "solana",
-  contractAddress: "9qtzGiJX7Zk6JUSZpA5G2m3HrZw8Etemfj1wfZKypump",
+  contractAddress: "FZYu8i7T7mQ8GvPpxedv5poUAwv2Si36egCgv7Zmpump",
   twitterUrl: "https://x.com/RiskDesk_",
   loreUrl: "https://x.com/RiskDesk_/status/2088888972651135323",
   upstreamUrl: "https://github.com/BlackRock/aladdinsdk",   // the original; our fork stays unlinked

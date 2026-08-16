@@ -97,6 +97,26 @@
         if (closes[i - 1] > 0) returns.push((closes[i] - closes[i - 1]) / closes[i - 1]);
       }
 
+      // A risk model with two hours of data is a rumour with decimals. Report
+      // nothing rather than report zero — zero would be a lie in this direction.
+      const MIN_RETURNS = 5;
+      if (returns.length < MIN_RETURNS) {
+        ["var95", "var99", "vol", "mdd", "sharpe", "worst", "best"].forEach(
+          (id) => ($(id).textContent = "—")
+        );
+        $("px").textContent = fmtPrice(parseFloat(token.price_usd));
+        $("mcap").textContent =
+          "market cap " + fmtUsd(parseFloat(token.market_cap_usd || token.fdv_usd));
+        $("hero-var").textContent = "not yet measurable";
+        $("obs").textContent =
+          `${closes.length} daily observation${closes.length === 1 ? "" : "s"} — insufficient history to measure; the risk is present regardless`;
+        $("feed").textContent = "FEED: LIVE — ACCUMULATING HISTORY";
+        $("feed").classList.add("live");
+        $("buy").href = "https://pump.fun/coin/" + ca;
+        $("buy").textContent = "TAKE THE RISK ›";
+        return;
+      }
+
       const v95 = historicalVar(returns, 0.95);
       const v99 = historicalVar(returns, 0.99);
       const sr = sharpe(returns);
