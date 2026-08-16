@@ -115,6 +115,7 @@
   $("fork").href = CONFIG.forkUrl;
   $("fork2").href = CONFIG.forkUrl;
   $("x").href = CONFIG.twitterUrl;
+  $("lore").href = CONFIG.loreUrl;
 
   const ca = new URLSearchParams(location.search).get("ca");
   if (ca) CONFIG.contractAddress = ca;
